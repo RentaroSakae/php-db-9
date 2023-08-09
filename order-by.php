@@ -12,39 +12,26 @@
                 $order = NULL;
             }
 
-            if($order === 'asc') {
+            if(isset($_GET['key'])) {
+                $key = $_GET['key'];
+            } else {
+                $key = NULL;
+            }
+
+            if($order === 'asc' && $key === "age") {
                 $sql = 'SELECT id, name, furigana, age FROM users ORDER BY age ASC';
-            } elseif($order === 'desc') {
+            } elseif($order === 'asc' && $key === "furigana") {
+                $sql = 'SELECT id, name, furigana, age FROM users ORDER BY furigana ASC';
+            } elseif ($order === 'desc' && $key === "age") {
                 $sql = 'SELECT id, name, furigana, age FROM users ORDER BY age DESC';
+            } elseif($order === 'desc' && $key === "furigana") {
+                $sql = 'SELECT id, name, furigana, age FROM users ORDER BY furigana DESC';
             } else {
                 $sql = 'SELECT id, name, furigana, age FROM users ORDER BY id';
             }
 
             $stmt = $pdo->query($sql);
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch(PDOException $e) {
-            exit($e->getMessage());
-        }
-
-        try {
-            $pdo = new PDO($dsn, $user, $password);
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-            if(isset($_GET['furigana'])) {
-                $furigana = $_GET['furigana'];
-            } else {
-                $furigana = NULL;
-            }
-
-            if($furigana === 'asc') {
-                $sql = 'SELECT id, name, furigana, age FROM users ORDER BY furigana';
-            } else {
-                $sql = 'SELECT id, name, furigana, age FROM users ORDER BY id';
-            }
-
-            $stmt=$pdo->query($sql);
-            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
         } catch(PDOException $e) {
             exit($e->getMessage());
         }
@@ -61,9 +48,9 @@
 
     <body>
         <div class="sort">
-            <a href="order-by.php?order=asc" class="sort-btn">年齢順(昇順)</a>
-            <a href="order-by.php?order=desc" class="sort-btn">年齢順(降順)</a>
-            <a href="order-by.php?order=asc" class="sort-btn">ふりがな（五十音順）</a>
+            <a href="order-by.php?key=age&order=asc" class="sort-btn">年齢順(昇順)</a>
+            <a href="order-by.php?key=age&order=desc" class="sort-btn">年齢順(降順)</a>
+            <a href="order-by.php?key=furigana&order=asc" class="sort-btn">ふりがな（五十音順）</a>
         </div>
         <table>
             <tr>
